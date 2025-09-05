@@ -1,14 +1,10 @@
-import {
-  Card, Divider
-} from 'antd';
+import { Card, Divider } from 'antd';
 import React from 'react';
 import ArchSelector from './ArchSelector';
 import Category from './Category';
 import Description from './Description';
 import { DownloadBtn } from './DownloadBtn';
 import { VersionSelector } from './VersionSelector';
-
-
 
 const ExtensionCard: React.FC = () => {
   return (

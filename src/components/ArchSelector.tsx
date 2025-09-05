@@ -1,6 +1,6 @@
 import { DesktopOutlined } from "@ant-design/icons";
 import { Select, Typography } from "antd";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { getSupportedArchitectures } from "../services/api";
 import { useExtensionStore } from "../store/useExtensionStore";
 import { Architecture } from "../types";
@@ -8,14 +8,18 @@ import { Architecture } from "../types";
 const { Option } = Select;
 const { Text } = Typography;
 
-
 const architecturesMap = getSupportedArchitectures();
 
 const ArchSelector = () => {
   const { selectedArchitecture, setSelectedArchitecture, availableArchitectures } = useExtensionStore();
+  
   const architectures = useMemo(() => {
     return availableArchitectures.map((arch) => architecturesMap.get(arch)!).filter(Boolean);
   }, [availableArchitectures]);
+
+  const handleArchitectureChange = useCallback((value: string) => {
+    setSelectedArchitecture(value as Architecture);
+  }, [setSelectedArchitecture]);
 
   return (
     <div className="w-70">
@@ -27,7 +31,7 @@ const ArchSelector = () => {
       </div>
       <Select
         value={selectedArchitecture}
-        onChange={(value) => setSelectedArchitecture(value as Architecture)}
+        onChange={handleArchitectureChange}
         placeholder="Select Architecture"
         style={{ width: '200px' }}
       >

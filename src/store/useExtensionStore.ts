@@ -14,17 +14,6 @@ interface ExtensionStore extends AppState {
   reset: () => void;
 }
 
-const initialState: AppState = {
-  extension: null,
-  loading: false,
-  error: null,
-  searchInput: '',
-  selectedArchitecture: await detectUserArchitecture(),
-  selectedVersion: '',
-  availableArchitectures: [],
-  availableVersions: new Map<Architecture, ExtensionVersion[]>(),
-};
-
 const getMatchVersions = (versions: ExtensionVersion[], architecture: Architecture) => {
   if (architecture === 'universal') {
     return versions.filter(version =>
@@ -36,10 +25,20 @@ const getMatchVersions = (versions: ExtensionVersion[], architecture: Architectu
   );
 };
 
+const detectedArchitecture = await detectUserArchitecture();
+
 export const useExtensionStore = create<ExtensionStore>()(
   devtools(
     (set) => ({
-      ...initialState,
+      // Initialize with default values, will be updated async
+      extension: null,
+      loading: false,
+      error: null,
+      searchInput: '',
+      selectedArchitecture: 'universal', // Default fallback
+      selectedVersion: '',
+      availableArchitectures: [],
+      availableVersions: new Map<Architecture, ExtensionVersion[]>(),
 
       setSearchInput: (input: string) => {
         set({ searchInput: input, error: null });
@@ -104,11 +103,11 @@ export const useExtensionStore = create<ExtensionStore>()(
             return a.localeCompare(b);
           });
 
-          set((state) => {
-            // 计算当前架构的初始版本
-            const currentArchitecture = state.selectedArchitecture;
+          set(() => {
+            const isdetectedArchAvaiable = archs.includes(detectedArchitecture);
+            const initArchitecture = isdetectedArchAvaiable ? detectedArchitecture : (archs.length > 0 ? archs[0] : 'universal');
             let initialVersion = '';
-            const filteredVersions = getMatchVersions(availableVersions.get(currentArchitecture) ?? [], currentArchitecture);
+            const filteredVersions = getMatchVersions(availableVersions.get(initArchitecture) ?? [], initArchitecture);
 
             if (filteredVersions.length > 0) {
               initialVersion = filteredVersions[0].version;
@@ -118,6 +117,7 @@ export const useExtensionStore = create<ExtensionStore>()(
               loading: false,
               extension: extension,
               searchInput: extensionId.trim(),
+              selectedArchitecture: initArchitecture,
               selectedVersion: initialVersion,
               availableArchitectures: archs,
               availableVersions: availableVersions
@@ -138,7 +138,15 @@ export const useExtensionStore = create<ExtensionStore>()(
       },
 
       reset: () => {
-        set(initialState);
+        set({
+          extension: null,
+          loading: false,
+          error: null,
+          searchInput: '',
+          selectedVersion: '',
+          availableArchitectures: [],
+          availableVersions: new Map<Architecture, ExtensionVersion[]>(),
+        });
       },
 
     }),

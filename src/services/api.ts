@@ -16,20 +16,32 @@ const api = axios.create({
  * 从URL或扩展ID中提取扩展信息
  */
 export function parseExtensionInput(input: string): { publisherName: string; extensionName: string } | null {
+  if (!input || typeof input !== 'string') {
+    return null;
+  }
+
+  const trimmedInput = input.trim();
+  
   // 处理URL格式：https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools
-  const urlMatch = input.match(/itemName=([^&]+)/);
-  if (urlMatch) {
-    const [publisherName, extensionName] = urlMatch[1].split('.');
-    if (publisherName && extensionName) {
-      return { publisherName, extensionName };
+  const urlMatch = trimmedInput.match(/itemName=([^&]+)/);
+  if (urlMatch && urlMatch[1]) {
+    const parts = urlMatch[1].split('.');
+    if (parts.length >= 2) {
+      const publisherName = parts[0];
+      const extensionName = parts.slice(1).join('.');
+      if (publisherName && extensionName) {
+        return { publisherName, extensionName };
+      }
     }
   }
 
   // 处理扩展ID格式：ms-vscode.cpptools
-  const idMatch = input.match(/^([^.]+)\.(.+)$/);
+  const idMatch = trimmedInput.match(/^([^.]+)\.(.+)$/);
   if (idMatch) {
     const [, publisherName, extensionName] = idMatch;
-    return { publisherName, extensionName };
+    if (publisherName && extensionName) {
+      return { publisherName, extensionName };
+    }
   }
 
   return null;
@@ -41,7 +53,7 @@ export function parseExtensionInput(input: string): { publisherName: string; ext
 export async function searchExtension(extensionId: string): Promise<Extension | null> {
   const parsedInput = parseExtensionInput(extensionId);
   if (!parsedInput) {
-    throw new Error('Invalid extension ID or URL format');
+    throw new Error('Invalid extension ID or URL format. Please use format "publisher.extension" or a valid marketplace URL.');
   }
 
   const { publisherName, extensionName } = parsedInput;
@@ -70,7 +82,7 @@ export async function searchExtension(extensionId: string): Promise<Extension | 
       query
     );
 
-    const extensions = response.data.results?.[0]?.extensions;
+    const extensions = response.data?.results?.[0]?.extensions;
     if (!extensions || extensions.length === 0) {
       return null;
     }
@@ -78,7 +90,20 @@ export async function searchExtension(extensionId: string): Promise<Extension | 
     return extensions[0];
   } catch (error) {
     console.error('Error searching extension:', error);
-    throw new Error('Failed to search extension');
+    
+    if (axios.isAxiosError(error)) {
+      if (error.response?.status === 404) {
+        throw new Error('Extension not found in the marketplace.');
+      }
+      if (error.code === 'ECONNABORTED') {
+        throw new Error('Request timeout. Please check your network connection.');
+      }
+      if (error.response?.status === 429) {
+        throw new Error('Too many requests. Please try again later.');
+      }
+    }
+    
+    throw new Error('Failed to search extension. Please check your network connection.');
   }
 }
 
@@ -121,13 +146,22 @@ export function getSupportedArchitectures(): Map<Architecture, ArchitectureOptio
 }
 
 
-export async function downloadFile(url: string, fileName: string) {
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = fileName;
-  // 把元素设置为不可见
-  link.style.display = 'none';
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+export async function downloadFile(url: string, fileName: string): Promise<void> {
+  try {
+    if (!url || !fileName) {
+      throw new Error('Invalid download parameters');
+    }
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    link.style.display = 'none';
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  } catch (error) {
+    console.error('Download error:', error);
+    throw new Error('Failed to download file. Please try again.');
+  }
 }

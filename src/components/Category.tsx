@@ -1,14 +1,26 @@
 import { AppstoreOutlined, TagsOutlined } from "@ant-design/icons";
 import { Space, Tag, Typography } from "antd";
+import React, { useMemo } from "react";
 import { useExtensionStore } from "../store/useExtensionStore";
+
 const { Text } = Typography;
 
-const Category = () => {
+const Category: React.FC = () => {
   const { extension } = useExtensionStore();
-  if (!extension) return <></>;
+
+  const displayCategories = useMemo(() => {
+    return extension?.categories?.slice(0, 5) ?? [];
+  }, [extension?.categories]);
+
+  const displayTags = useMemo(() => {
+    return extension?.tags?.slice(0, 8) ?? [];
+  }, [extension?.tags]);
+
+  if (!extension) return null;
+
   return (
     <div>
-      {extension.categories && extension.categories.length > 0 && (
+      {displayCategories.length > 0 && (
         <div style={{ marginBottom: '16px' }}>
           <div style={{ marginBottom: '8px' }}>
             <Text strong>
@@ -17,7 +29,7 @@ const Category = () => {
             </Text>
           </div>
           <Space size={[8, 8]} wrap>
-            {extension.categories.slice(0, 5).map((category) => (
+            {displayCategories.map((category) => (
               <Tag key={category} color="blue">
                 {category}
               </Tag>
@@ -26,7 +38,7 @@ const Category = () => {
         </div>
       )}
 
-      {extension.tags && extension.tags.length > 0 && (
+      {displayTags.length > 0 && (
         <div>
           <div style={{ marginBottom: '8px' }}>
             <Text strong>
@@ -35,7 +47,7 @@ const Category = () => {
             </Text>
           </div>
           <Space size={[8, 8]} wrap>
-            {extension.tags.slice(0, 8).map((tag) => (
+            {displayTags.map((tag) => (
               <Tag key={tag} color="default">
                 {tag}
               </Tag>

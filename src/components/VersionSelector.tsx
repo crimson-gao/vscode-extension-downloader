@@ -1,9 +1,12 @@
 import { CalendarOutlined, ClockCircleOutlined } from "@ant-design/icons";
 import { Alert, Select, Typography } from "antd";
 import { format } from "date-fns";
+import { useCallback, useMemo } from "react";
 import { useExtensionStore } from "../store/useExtensionStore";
+
 const { Text } = Typography;
 const { Option } = Select;
+
 const formatDate = (dateString: string) => {
   try {
     return format(new Date(dateString), 'yyyy/MM/dd');
@@ -13,11 +16,15 @@ const formatDate = (dateString: string) => {
 };
 
 export const VersionSelector = () => {
-
   const { availableVersions, selectedVersion, selectedArchitecture, setSelectedVersion } = useExtensionStore();
 
+  const filteredVersions = useMemo(() => {
+    return availableVersions.get(selectedArchitecture) ?? [];
+  }, [availableVersions, selectedArchitecture]);
 
-  const filteredVersions = availableVersions.get(selectedArchitecture) ?? [];
+  const handleVersionChange = useCallback((value: string) => {
+    setSelectedVersion(value);
+  }, [setSelectedVersion]);
 
   return (
     <div className="w-70">
@@ -31,7 +38,7 @@ export const VersionSelector = () => {
       {filteredVersions.length > 0 ? (
         <Select
           value={selectedVersion}
-          onChange={setSelectedVersion}
+          onChange={handleVersionChange}
           placeholder="Select Version"
           style={{ minWidth: '200px', maxWidth: '300px' }}
         >

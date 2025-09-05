@@ -1,6 +1,6 @@
 import { ExclamationCircleOutlined, HomeOutlined, ReloadOutlined } from '@ant-design/icons';
 import { Alert, Button, Card, Space, Typography } from 'antd';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useExtensionStore } from '../store/useExtensionStore';
 
 const { Title, Text } = Typography;
@@ -12,13 +12,13 @@ interface ErrorStateProps {
 const ErrorState: React.FC<ErrorStateProps> = ({ error }) => {
   const { clearError, reset } = useExtensionStore();
 
-  const handleRetry = () => {
+  const handleRetry = useCallback(() => {
     clearError();
-  };
+  }, [clearError]);
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     reset();
-  };
+  }, [reset]);
 
   return (
     <Card style={{ textAlign: 'center', padding: '48px 24px' }}>

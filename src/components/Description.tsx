@@ -1,6 +1,6 @@
 import { AppstoreOutlined, CheckCircleOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar, Tooltip, Typography } from "antd";
-
+import React, { useMemo } from "react";
 import { useExtensionStore } from "../store/useExtensionStore";
 import { ExtensionFile, ExtensionVersion } from "../types";
 
@@ -14,10 +14,20 @@ function getExtensionIconUrl(version: ExtensionVersion): string | null {
   return iconFile?.source || null;
 }
 
-const Description = () => {
+const Description: React.FC = () => {
   const { extension } = useExtensionStore();
-  if (!extension) return <></>;
-  const iconUrl = extension.versions.length > 0 ? getExtensionIconUrl(extension.versions[0]) : null;
+  
+  const iconUrl = useMemo(() => {
+    return extension && extension.versions.length > 0 
+      ? getExtensionIconUrl(extension.versions[0]) 
+      : null;
+  }, [extension]);
+
+  const isVerifiedPublisher = useMemo(() => {
+    return extension?.publisher?.flags?.includes('verified') ?? false;
+  }, [extension?.publisher?.flags]);
+
+  if (!extension) return null;
   return (
     <div className="w-160 flex flex-row">
       <Avatar
@@ -33,7 +43,7 @@ const Description = () => {
           <Title level={3} style={{ margin: 0, marginRight: '8px' }}>
             {extension.displayName}
           </Title>
-          {extension.publisher.flags?.includes('verified') && (
+          {isVerifiedPublisher && (
             <Tooltip title="Verified Publisher">
               <CheckCircleOutlined style={{ color: '#52c41a', fontSize: '20px' }} />
             </Tooltip>
