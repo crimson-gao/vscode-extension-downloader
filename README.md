@@ -4,20 +4,34 @@
 
 A web-based tool for downloading VSCode extensions for offline installation. This tool allows you to easily download `.vsix` files from the official Visual Studio Code Marketplace for different cpu archs and versions.
 
-## ✨ Features
-
-- 🔍 **Easy Search**: Search extensions by ID (e.g., `ms-python.python`) or marketplace URL
-- 🏗️ **Architecture Support**: Download extensions for specific architectures (Windows, macOS, Linux, Alpine, Universal, Web)
-- 📦 **Version Selection**: Choose from all available versions of an extension
-- 💾 **Direct Download**: Download `.vsix` files directly to your device
-
 ## 🚀 Quick Start
-
-### Online Usage
 
 Visit the live demo: [VSCode Extension Downloader](https://vscode-extension-downloader.pages.dev/)
 
-### Local Development
+1. **Search for an extension**:
+   - Enter the extension ID (e.g., `ms-python.python`)
+   - Or paste the marketplace URL (e.g., `https://marketplace.visualstudio.com/items?itemName=ms-python.python`)
+
+2. **Select architecture** :
+   - Choose the appropriate architecture for your system, eg: `linux-x64`
+   - `universal` extensions work on all platforms
+
+3. **Choose version**:
+   - Select from available versions, default is latest
+
+4. **Download**:
+   - Click the download button to get the `.vsix` file
+
+5. **Offline install**
+   1. Open VSCode
+   2. Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on Mac)
+   3. Type "Extensions: Install from VSIX..."
+   4. Select the downloaded `.vsix` file
+   5. Restart VSCode if prompted
+
+## Local Deployment
+
+You can local deploy this project as follows:
 
 1. **Clone the repository**
 
@@ -37,41 +51,6 @@ Visit the live demo: [VSCode Extension Downloader](https://vscode-extension-down
    ```bash
    yarn dev
    ```
-
-4. **Build for production**
-
-   ```bash
-   yarn build
-   ```
-
-## 📖 How to Use
-
-1. **Search for an extension**:
-   - Enter the extension ID (e.g., `ms-python.python`)
-   - Or paste the marketplace URL (e.g., `https://marketplace.visualstudio.com/items?itemName=ms-python.python`)
-   - Click popular extension tags for quick access
-
-2. **Select architecture** (if available):
-   - Choose the appropriate architecture for your system
-   - Universal extensions work on all platforms
-
-3. **Choose version**:
-   - Select from available versions
-   - Latest version is selected by default
-
-4. **Download**:
-   - Click the download button to get the `.vsix` file
-   - Install in VSCode using command `Extensions: Install from VSIX...`
-
-## 📝 Installation in VSCode
-
-After downloading a `.vsix` file:
-
-1. Open VSCode
-2. Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on Mac)
-3. Type "Extensions: Install from VSIX..."
-4. Select the downloaded `.vsix` file
-5. Restart VSCode if prompted
 
 ## ⚠️ Disclaimer
 
