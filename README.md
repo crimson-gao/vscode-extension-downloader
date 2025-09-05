@@ -1,157 +1,77 @@
-# 🚀 VSCode Extension Downloader
+# VSCode Extension Downloader
 
-一个现代化的 VSCode 扩展离线包下载器，支持通过扩展ID或商店URL下载扩展的历史版本。
+[简体中文](README_CN.md) | English
 
-![VSCode Extension Downloader](https://img.shields.io/badge/VSCode-Extension%20Downloader-blue?style=for-the-badge&logo=visual-studio-code)
+A web-based tool for downloading VSCode extensions for offline installation. This tool allows you to easily download `.vsix` files from the official Visual Studio Code Marketplace for different cpu archs and versions.
 
-## ✨ 特性
+## ✨ Features
 
-- 🔍 **智能搜索**: 支持扩展ID和完整商店URL两种搜索方式
-- 📱 **响应式设计**: 现代化Material-UI界面，完美适配各种设备
-- 🎯 **多架构支持**: 支持Windows、macOS、Linux等多种平台架构
-- 📦 **版本管理**: 显示完整的版本历史，包括发布时间
-- ⚡ **实时下载**: 带有进度条的实时下载体验
-- 🎨 **流畅动画**: 使用Framer Motion提供丝滑的交互动画
-- 🔄 **状态管理**: 基于Zustand的响应式状态管理
+- 🔍 **Easy Search**: Search extensions by ID (e.g., `ms-python.python`) or marketplace URL
+- 🏗️ **Architecture Support**: Download extensions for specific architectures (Windows, macOS, Linux, Alpine, Universal, Web)
+- 📦 **Version Selection**: Choose from all available versions of an extension
+- 💾 **Direct Download**: Download `.vsix` files directly to your device
 
-## 🛠️ 技术栈
+## 🚀 Quick Start
 
-- **前端框架**: React 18 + TypeScript
-- **UI组件库**: Material-UI (MUI)
-- **状态管理**: Zustand
-- **动画库**: Framer Motion  
-- **HTTP客户端**: Axios
-- **构建工具**: Vite
-- **样式方案**: Emotion + CSS-in-JS
+### Online Usage
 
-## 🚀 快速开始
+Visit the live demo: [VSCode Extension Downloader](https://github.com/crimson-gao/vscode-extension-downloader)
 
-### 安装依赖
+### Local Development
 
-```bash
-# 使用 yarn
-yarn install
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/crimson-gao/vscode-extension-downloader.git
+   cd vscode-extension-downloader
+   ```
 
-# 或使用 npm
-npm install
-```
+2. **Install dependencies**
+   ```bash
+   yarn install
+   ```
 
-### 启动开发服务器
+3. **Start development server**
+   ```bash
+   yarn dev
+   ```
 
-```bash
-# 使用 yarn
-yarn dev
+4. **Build for production**
+   ```bash
+   yarn build
+   ```
 
-# 或使用 npm
-npm run dev
-```
+## 📖 How to Use
 
-应用将在 `http://localhost:5173` 启动
+1. **Search for an extension**:
+   - Enter the extension ID (e.g., `ms-python.python`)
+   - Or paste the marketplace URL (e.g., `https://marketplace.visualstudio.com/items?itemName=ms-python.python`)
+   - Click popular extension tags for quick access
 
-### 构建生产版本
+2. **Select architecture** (if available):
+   - Choose the appropriate architecture for your system
+   - Universal extensions work on all platforms
 
-```bash
-# 使用 yarn
-yarn build
+3. **Choose version**:
+   - Select from available versions
+   - Latest version is selected by default
 
-# 或使用 npm
-npm run build
-```
+4. **Download**:
+   - Click the download button to get the `.vsix` file
+   - Install in VSCode using command `Extensions: Install from VSIX...`
 
-## 📖 使用方法
+## 📝 Installation in VSCode
 
-### 1. 搜索扩展
+After downloading a `.vsix` file:
 
-支持两种输入方式：
+1. Open VSCode
+2. Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on Mac)
+3. Type "Extensions: Install from VSIX..."
+4. Select the downloaded `.vsix` file
+5. Restart VSCode if prompted
 
-- **扩展ID格式**: `ms-vscode.cpptools`
-- **商店URL格式**: `https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools`
+## ⚠️ Disclaimer
 
-### 2. 选择架构
+All extension resources are sourced from the official Visual Studio Code Marketplace. This tool serves as a download facilitator only. We do not host, modify, or take responsibility for any extension content, functionality, or potential issues. Users download extensions at their own discretion and risk.
 
-支持的目标平台：
-- Universal (通用版本)
-- Windows (x64, x86, ARM64)
-- macOS (x64, ARM64)
-- Linux (x64, ARM64, ARM)
-- Alpine Linux (x64, ARM64)
-- Web 版本
+Make sure the url is trustable before you download from it.
 
-### 3. 下载版本
-
-- 查看完整的版本历史
-- 选择目标架构
-- 一键下载 `.vsix` 文件
-
-## 🎯 API支持
-
-应用使用 VSCode Marketplace 官方API：
-
-```bash
-curl 'https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery' \
-  -H 'accept: application/json;api-version=7.2-preview.1;excludeUrls=true' \
-  -H 'content-type: application/json' \
-  --data-raw '{
-    "assetTypes": null,
-    "filters": [{
-      "criteria": [{
-        "filterType": 7,
-        "value": "ms-vscode.cpptools"
-      }],
-      "direction": 2,
-      "pageSize": 100,
-      "pageNumber": 1,
-      "sortBy": 0,
-      "sortOrder": 0,
-      "pagingToken": null
-    }],
-    "flags": 2151
-  }'
-```
-
-## 📁 项目结构
-
-```
-src/
-├── components/          # React组件
-│   ├── SearchBar.tsx   # 搜索栏组件
-│   ├── ExtensionInfo.tsx # 扩展信息显示
-│   ├── VersionList.tsx # 版本列表
-│   ├── ArchitectureSelector.tsx # 架构选择器
-│   ├── LoadingState.tsx # 加载状态
-│   └── ErrorState.tsx  # 错误状态
-├── services/           # 服务层
-│   └── api.ts         # API调用封装
-├── store/             # 状态管理
-│   └── useExtensionStore.ts # Zustand store
-├── types/             # TypeScript类型定义
-│   └── index.ts       # 类型定义
-├── utils/             # 工具函数
-│   └── animations.ts  # 动画配置
-└── app/               # 应用主入口
-    └── app.tsx        # 主应用组件
-```
-
-## 🎨 设计特色
-
-- **渐变背景**: 现代化的渐变色背景设计
-- **卡片布局**: 清晰的信息层级和视觉分组
-- **微交互**: 丰富的hover和点击反馈效果
-- **响应式**: 完美适配桌面端和移动端
-- **主题统一**: 一致的颜色系统和字体规范
-
-## 🤝 贡献
-
-欢迎提交 Issue 和 Pull Request！
-
-## 📄 许可证
-
-MIT License
-
-## 👨‍💻 作者
-
-Created with ❤️ by [Crimson](https://github.com/crimson-gao)
-
----
-
-⭐ 如果这个项目对你有帮助，请给它一个星标！
