@@ -17,11 +17,15 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
 
-      - name: Install dependencies
-        uses: bahmutov/npm-install@v1
+      - name: Run install
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: install
 
-      - name: Build project
-        run: npm run build
+      - name: Build production bundle
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: build:prod
 
       - name: Upload production-ready build files
         uses: actions/upload-artifact@v4
