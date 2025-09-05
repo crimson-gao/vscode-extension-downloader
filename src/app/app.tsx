@@ -1,10 +1,14 @@
 
 import { Layout, Typography } from 'antd';
+import React, { Suspense } from 'react';
 import ErrorState from '../components/ErrorState';
-import ExtensionCard from '../components/ExtensionCard';
+import LazyLoadingFallback from '../components/LazyLoadingFallback';
 import LoadingState from '../components/LoadingState';
-import SearchBar from '../components/SearchBar';
 import { useExtensionStore } from '../store/useExtensionStore';
+
+// Lazy load 较大的组件
+const ExtensionCard = React.lazy(() => import('../components/ExtensionCard'));
+const SearchBar = React.lazy(() => import('../components/SearchBar'));
 
 const { Content, Footer } = Layout;
 const { Link } = Typography;
@@ -16,7 +20,9 @@ function App() {
     <Layout style={{ minHeight: '100vh', backgroundColor: '#f5f5f5' }}>
       <Content style={{ padding: '24px', margin: '0 auto', width: '85%' }}>
         <div style={{ marginBottom: '24px' }}>
-          <SearchBar />
+          <Suspense fallback={<LazyLoadingFallback height={150} tip="Loading search..." />}>
+            <SearchBar />
+          </Suspense>
         </div>
 
         <div>
@@ -25,7 +31,9 @@ function App() {
           {error && !loading && <ErrorState error={error} />}
 
           {extension && !loading && !error && (
-            <ExtensionCard />
+            <Suspense fallback={<LazyLoadingFallback height={300} tip="Loading extension details..." />}>
+              <ExtensionCard />
+            </Suspense>
           )}
         </div>
       </Content>

@@ -15,7 +15,7 @@ const formatDate = (dateString: string) => {
   }
 };
 
-export const VersionSelector = () => {
+const VersionSelector = () => {
   const { availableVersions, selectedVersion, selectedArchitecture, setSelectedVersion } = useExtensionStore();
 
   const filteredVersions = useMemo(() => {
@@ -70,3 +70,5 @@ export const VersionSelector = () => {
     </div>
   );
 };
+
+export default VersionSelector;
