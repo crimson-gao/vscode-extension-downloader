@@ -1,6 +1,17 @@
 import { Architecture } from '../types';
 
 
+function isAppleSilicon() {
+    const canvas = document.createElement('canvas');
+    const gl = canvas.getContext('webgl');
+
+    // Best guess if the device is an Apple Silicon
+    // https://stackoverflow.com/a/65412357
+    // @ts-expect-error - Object is possibly 'null'
+  return gl.getSupportedExtensions().indexOf('WEBGL_compressed_texture_etc') !== -1
+  
+
+}
 /**
  * 检测用户机器的架构并返回最适合的VSCode扩展架构
  */
@@ -25,7 +36,7 @@ export async function detectUserArchitecture(): Promise<Architecture> {
       return 'win32-x64';
     }
   } else if (isMac) {
-    if (!isARM) {
+    if (!isAppleSilicon()) {
       return 'darwin-x64'; // Intel Mac
     } else {
       return 'darwin-arm64'; // Apple Silicon
