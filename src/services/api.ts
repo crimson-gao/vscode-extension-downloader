@@ -82,34 +82,6 @@ export async function searchExtension(extensionId: string): Promise<Extension | 
   }
 }
 
-export function hasSignature(version: ExtensionVersion): boolean {
-  const signatureFile = version.files.find((file: ExtensionFile) =>
-    file.assetType === 'Microsoft.VisualStudio.Services.VsixSignature'
-  );
-  return signatureFile !== undefined;
-}
-
-/**
- * 获取版本的签名信息
- */
-export async function getSignatureInfo(version: ExtensionVersion): Promise<string | null> {
-  const signatureFile = version.files.find((file: ExtensionFile) =>
-    file.assetType === 'Microsoft.VisualStudio.Services.VsixSignature'
-  );
-  return signatureFile?.source || null;
-}
-
-/**
- * 获取扩展图标URL
- */
-export function getExtensionIconUrl(version: ExtensionVersion): string | null {
-  const iconFile = version.files.find((file: ExtensionFile) =>
-    file.assetType === 'Microsoft.VisualStudio.Services.Icons.Default'
-  );
-
-  return iconFile?.source || null;
-}
-
 /**
  * 获取扩展的下载URL (保留向后兼容)
  */

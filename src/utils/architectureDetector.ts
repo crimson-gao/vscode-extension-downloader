@@ -1,4 +1,3 @@
-import arch from 'arch';
 import { Architecture } from '../types';
 
 
@@ -12,7 +11,7 @@ export async function detectUserArchitecture(): Promise<Architecture> {
   const isWindows = lowerUserAgent.includes('win');
   const isMac = lowerUserAgent.includes('mac');
   const isLinux = lowerUserAgent.includes('linux');
-  const is64Bit = arch() === 'x64';
+  const is64Bit = lowerUserAgent.includes('x64') || lowerUserAgent.includes('wow64');
 
   // 检测架构
   const isARM = userAgent.includes('arm') || userAgent.includes('aarch64');

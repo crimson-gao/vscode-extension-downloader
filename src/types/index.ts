@@ -42,12 +42,10 @@ export interface Extension {
   tags: string[];
   installationTargets: InstallationTarget[];
   deploymentType: number;
-  statistics?: ExtensionStatistic[];
-}
-
-export interface ExtensionStatistic {
-  statisticName: string;
-  value: number;
+  statistics?: Array<{
+    statisticName: string;
+    value: number;
+  }>;
 }
 
 export interface VSCodeMarketplaceResponse {
@@ -94,19 +92,6 @@ export type Architecture =
   | 'alpine-arm64'
   | 'universal'
   | 'web';
-
-export interface ArchitectureOption {
-  value: Architecture;
-  label: string;
-  icon: string;
-}
-
-export interface DownloadInfo {
-  version: string;
-  architecture: Architecture;
-  downloadUrl: string;
-  fileName: string;
-}
 
 export interface AppState {
   extension: Extension | null;
