@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { Architecture, Extension, ExtensionFile, ExtensionQuery, ExtensionVersion, VSCodeMarketplaceResponse } from '../types';
-
 const MARKETPLACE_API_BASE = 'https://marketplace.visualstudio.com/_apis/public/gallery';
 
 // 创建axios实例
@@ -21,29 +20,32 @@ export function parseExtensionInput(input: string): { publisherName: string; ext
   }
 
   const trimmedInput = input.trim();
+
+   // 处理扩展ID格式：ms-vscode.cpptools
+   const idMatch = trimmedInput.match(/^([a-zA-Z0-9-_]+)\.([a-zA-Z0-9-_]+)$/);
+   if (idMatch) {
+     const [, publisherName, extensionName] = idMatch;
+     if (publisherName && extensionName) {
+       return { publisherName, extensionName };
+     }
+   }
   
   // 处理URL格式：https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools
-  const urlMatch = trimmedInput.match(/itemName=([^&]+)/);
-  if (urlMatch && urlMatch[1]) {
-    const parts = urlMatch[1].split('.');
-    if (parts.length >= 2) {
-      const publisherName = parts[0];
-      const extensionName = parts.slice(1).join('.');
-      if (publisherName && extensionName) {
-        return { publisherName, extensionName };
+  try {
+    const urlObj = new URL(trimmedInput);
+    console.log('urlObj', urlObj);
+    if (urlObj.searchParams && urlObj.searchParams.get('itemName')) {
+      const parts = urlObj.searchParams.get('itemName')!.split('.');
+      if (parts.length >= 2) {
+        const publisherName = parts[0];
+        const extensionName = parts.slice(1).join('.');
+        if (publisherName && extensionName) {
+          return { publisherName, extensionName };
+        }
       }
     }
-  }
-
-  // 处理扩展ID格式：ms-vscode.cpptools
-  const idMatch = trimmedInput.match(/^([^.]+)\.(.+)$/);
-  if (idMatch) {
-    const [, publisherName, extensionName] = idMatch;
-    if (publisherName && extensionName) {
-      return { publisherName, extensionName };
-    }
-  }
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-empty
+  } catch (e) {}
   return null;
 }
 
@@ -51,16 +53,14 @@ export function parseExtensionInput(input: string): { publisherName: string; ext
  * 搜索扩展
  */
 export async function searchExtension(extensionId: string): Promise<Extension | null> {
-  const parsedInput = parseExtensionInput(extensionId);
-  if (!parsedInput) {
-    throw new Error('Invalid extension ID or URL format. Please use format "publisher.extension" or a valid marketplace URL.');
-  }
 
-  const { publisherName, extensionName } = parsedInput;
-  const fullExtensionId = `${publisherName}.${extensionName}`;
+  const fullExtensionId = extensionId;
 
   const query: ExtensionQuery = {
-    assetTypes: null,
+    assetTypes: [
+      'Microsoft.VisualStudio.Services.VSIXPackage',
+      'Microsoft.VisualStudio.Services.Icons.Default'
+    ],
     filters: [{
       criteria: [{
         filterType: 7, // ExtensionName
@@ -73,7 +73,8 @@ export async function searchExtension(extensionId: string): Promise<Extension | 
       sortOrder: 0,
       pagingToken: null
     }],
-    flags: 2151 // IncludeVersions | IncludeFiles | IncludeStatistics | IncludeVersionProperties
+    flags: 2407,
+    // flags: 2151 // IncludeVersions | IncludeFiles | IncludeStatistics | IncludeVersionProperties
   };
 
   try {

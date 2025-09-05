@@ -1,8 +1,8 @@
-import { AppstoreOutlined, CheckCircleOutlined, UserOutlined } from "@ant-design/icons";
+import { AppstoreOutlined, CheckCircleOutlined, DownloadOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar, Tooltip, Typography } from "antd";
 import React, { useMemo } from "react";
 import { useExtensionStore } from "../store/useExtensionStore";
-import { ExtensionFile, ExtensionVersion } from "../types";
+import { Extension, ExtensionFile, ExtensionVersion } from "../types";
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -14,23 +14,29 @@ function getExtensionIconUrl(version: ExtensionVersion): string | null {
   return iconFile?.source || null;
 }
 
+const getInstallCount = (extension: Extension): number | undefined => {
+  return extension.statistics?.find((statistic) => statistic.statisticName === 'install')?.value ?? undefined;
+}
+
 const Description: React.FC = () => {
   const { extension } = useExtensionStore();
-  
+
   const iconUrl = useMemo(() => {
-    return extension && extension.versions.length > 0 
-      ? getExtensionIconUrl(extension.versions[0]) 
+    return extension && extension.versions.length > 0
+      ? getExtensionIconUrl(extension.versions[0])
       : null;
   }, [extension]);
 
   const isVerifiedPublisher = useMemo(() => {
-    return extension?.publisher?.flags?.includes('verified') ?? false;
-  }, [extension?.publisher?.flags]);
+    return extension?.publisher?.isDomainVerified ?? false;
+  }, [extension]);
 
   if (!extension) return null;
+  const installCount = getInstallCount(extension);
   return (
     <div className="w-160 flex flex-row">
       <Avatar
+        shape="square"
         size={80}
         src={iconUrl || undefined}
         icon={!iconUrl && <AppstoreOutlined />}
@@ -49,10 +55,18 @@ const Description: React.FC = () => {
             </Tooltip>
           )}
         </div>
+        <div className="flex flex-row gap-4">
+          <div className="flex items-center mb-3">
+            <UserOutlined style={{ marginRight: '6px', color: '#000000' }} />
+            <Text className="mr-6 font-bold">{extension.publisher.displayName}</Text>
 
-        <div className="flex items-center mb-3">
-          <UserOutlined style={{ marginRight: '6px', color: '#8c8c8c' }} />
-          <Text type="secondary">{extension.publisher.displayName}</Text>
+            {installCount &&
+              <DownloadOutlined />}
+            {installCount &&
+              <Text className="ml-1" type="secondary">{
+                installCount.toLocaleString()}</Text>
+            }
+          </div>
         </div>
 
         <Paragraph style={{ marginBottom: '16px', color: '#595959' }}>

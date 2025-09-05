@@ -68,15 +68,11 @@ export const useExtensionStore = create<ExtensionStore>()(
       },
 
       searchExtensionById: async (extensionId: string) => {
-        if (!extensionId.trim()) {
-          set({ error: 'Please enter a valid extension ID or URL' });
-          return;
-        }
 
         set({ loading: true, error: null, extension: null });
 
         try {
-          const extension = await searchExtension(extensionId.trim());
+          const extension = await searchExtension(extensionId);
 
           if (!extension) {
             set({
@@ -116,7 +112,7 @@ export const useExtensionStore = create<ExtensionStore>()(
             return {
               loading: false,
               extension: extension,
-              searchInput: extensionId.trim(),
+              searchInput: extensionId,
               selectedArchitecture: initArchitecture,
               selectedVersion: initialVersion,
               availableArchitectures: archs,

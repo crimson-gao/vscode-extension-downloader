@@ -2,6 +2,7 @@ import { ApiOutlined, SearchOutlined } from '@ant-design/icons';
 import { Alert, Card, Space, Tag, Typography } from 'antd';
 import Search from 'antd/es/input/Search';
 import React, { useCallback, useMemo, useState } from 'react';
+import { parseExtensionInput } from '../services/api';
 import { useExtensionStore } from '../store/useExtensionStore';
 
 const { Title } = Typography;
@@ -29,7 +30,19 @@ const SearchBar: React.FC = () => {
   }, [searchExtensionById, setLocalInput]);
 
   const handleSearch = useCallback(() => {
-    searchExtensionById(localInput);
+    const parsedInput = parseExtensionInput(localInput);
+    if (!parsedInput && localInput.trim() !== '') {
+      const url = new URL('https://marketplace.visualstudio.com/search');
+      url.searchParams.set('term', localInput);
+      url.searchParams.set('target', 'VSCode');
+      url.searchParams.set('category', 'All%20categories');
+      url.searchParams.set('sortBy', 'Relevance');
+      window.open(url.toString(), '_blank');
+      return;
+    }
+    if (parsedInput) {
+      searchExtensionById(`${parsedInput.publisherName}.${parsedInput.extensionName}`);
+    }
   }, [searchExtensionById, localInput]);
 
   const exampleTags = useMemo(() => {
@@ -37,7 +50,20 @@ const SearchBar: React.FC = () => {
       <Tag
         key={ext.id}
         icon={<ApiOutlined />}
-        className="cursor-pointer hover:text-blue-400 hover:border-gray-400"
+        style={{
+          cursor: 'pointer',
+          transition: 'all 0.2s ease',
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.backgroundColor = '#1890ff';
+          e.currentTarget.style.color = '#ffffff';
+          e.currentTarget.style.borderColor = '#1890ff';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.backgroundColor = '';
+          e.currentTarget.style.color = '';
+          e.currentTarget.style.borderColor = '';
+        }}
         onClick={() => handleExampleClick(ext.id)}
       >
         {ext.label}
@@ -83,6 +109,7 @@ const SearchBar: React.FC = () => {
         )}
 
         <div>
+          <span className="text-gray-500 pr-1">Popular:</span>
           <Space size={[2, 8]} wrap>
             {exampleTags}
           </Space>
