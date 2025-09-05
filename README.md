@@ -8,6 +8,8 @@ A web-based tool for downloading VSCode extensions for offline installation. Thi
 
 Visit the live demo: [VSCode Extension Downloader](https://vscode-extension-downloader.pages.dev/)
 
+![demo](demo/demo.png)
+
 1. **Search for an extension**:
    - Enter the extension ID (e.g., `ms-python.python`)
    - Or paste the marketplace URL (e.g., `https://marketplace.visualstudio.com/items?itemName=ms-python.python`)

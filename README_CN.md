@@ -9,6 +9,8 @@
 
 访问在线演示：[VSCode Extension Downloader](https://vscode-extension-downloader.pages.dev/)
 
+![demo](demo/demo.png)
+
 1. **搜索扩展**：
    - 输入扩展 ID（如 `ms-python.python`）
    - 或粘贴市场 URL（如 `https://marketplace.visualstudio.com/items?itemName=ms-python.python`）
