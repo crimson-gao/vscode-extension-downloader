@@ -15,27 +15,31 @@ A web-based tool for downloading VSCode extensions for offline installation. Thi
 
 ### Online Usage
 
-Visit the live demo: [VSCode Extension Downloader](https://github.com/crimson-gao/vscode-extension-downloader)
+Visit the live demo: [VSCode Extension Downloader](https://vscode-extension-downloader.pages.dev/)
 
 ### Local Development
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/crimson-gao/vscode-extension-downloader.git
    cd vscode-extension-downloader
    ```
 
 2. **Install dependencies**
+
    ```bash
    yarn install
    ```
 
 3. **Start development server**
+
    ```bash
    yarn dev
    ```
 
 4. **Build for production**
+
    ```bash
    yarn build
    ```
@@ -74,4 +78,3 @@ After downloading a `.vsix` file:
 All extension resources are sourced from the official Visual Studio Code Marketplace. This tool serves as a download facilitator only. We do not host, modify, or take responsibility for any extension content, functionality, or potential issues. Users download extensions at their own discretion and risk.
 
 Make sure the url is trustable before you download from it.
-

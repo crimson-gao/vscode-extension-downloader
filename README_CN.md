@@ -15,27 +15,31 @@
 
 ### 在线使用
 
-访问在线演示：[VSCode Extension Downloader](https://github.com/crimson-gao/vscode-extension-downloader)
+访问在线演示：[VSCode Extension Downloader](https://vscode-extension-downloader.pages.dev/)
 
 ### 本地开发
 
 1. **克隆仓库**
+
    ```bash
    git clone https://github.com/crimson-gao/vscode-extension-downloader.git
    cd vscode-extension-downloader
    ```
 
 2. **安装依赖**
+
    ```bash
    yarn install
    ```
 
 3. **启动开发服务器**
+
    ```bash
    yarn dev
    ```
 
 4. **构建生产版本**
+
    ```bash
    yarn build
    ```
