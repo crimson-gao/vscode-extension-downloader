@@ -32,7 +32,8 @@
     "build": "tsc && vite build",
     "build:prod": "tsc && vite build --mode production",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy:oss": "tsc && vite build --mode production --base=/web/vscode-extension-downloader/ && python3 scripts/upload.py"
   },
   "dependencies": {
     "@ant-design/icons": "^6.0.1",

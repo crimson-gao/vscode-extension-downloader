@@ -4,3 +4,6 @@ dist
 .eslintcache
 stats.html
 .vscode
+scripts/
+package-lock.json
+yarn.lock
