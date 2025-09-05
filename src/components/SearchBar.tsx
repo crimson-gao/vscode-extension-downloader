@@ -77,6 +77,9 @@ const SearchBar: React.FC = () => {
         <Title level={2} style={{ marginBottom: '8px', color: '#1890ff' }}>
           VSCode Extension Downloader
         </Title>
+        <Typography.Text type="secondary" style={{ fontSize: '14px', lineHeight: '1.4' }}>
+          Download VSCode extensions for offline installation
+        </Typography.Text>
       </div>
 
       <div className="px-40">

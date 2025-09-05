@@ -21,9 +21,9 @@ function App() {
 
         <div>
           {loading && <LoadingState />}
-          
+
           {error && !loading && <ErrorState error={error} />}
-          
+
           {extension && !loading && !error && (
             <ExtensionCard />
           )}
@@ -43,9 +43,15 @@ function App() {
           {' '}© {new Date().getFullYear()}
         </Typography.Text>
         <br />
-        <Typography.Text type="secondary" style={{ fontSize: '12px' }}>
-          Download VSCode extensions for offline installation
-        </Typography.Text>
+        <div className="flex justify-center">
+          <div className="max-w-1/2 text-center">
+            <Typography.Text type="secondary" style={{ fontSize: '11px', lineHeight: '1.4', opacity: 0.8 }}>
+              <strong>Disclaimer:</strong> All extension resources are sourced from the official Visual Studio Code Marketplace.
+              This tool serves as a download facilitator only. We do not host, modify, or take responsibility for any extension content,
+              functionality, or potential issues. Users download extensions at their own discretion and risk.
+            </Typography.Text>
+          </div>
+        </div>
       </Footer>
     </Layout>
   );
