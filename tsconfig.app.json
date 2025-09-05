@@ -19,9 +19,9 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true,
 
     /* Paths */
+    "baseUrl": ".",
     "paths": {
       "app/*": ["src/app/*"],
       "components/*": ["src/components/*"],

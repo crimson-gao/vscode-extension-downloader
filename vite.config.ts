@@ -5,7 +5,7 @@ import { defineConfig } from "vite";
 
 export default defineConfig(() => {
   return {
-    plugins: [react(), tailwindcss(),],
+    plugins: [react(), tailwindcss()],
     server: {
       port: 3000,
     },
@@ -16,5 +16,16 @@ export default defineConfig(() => {
         hooks: resolve(__dirname, "src", "hooks"),
       },
     },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'react': ['react', 'react-dom'],
+            'antd': ['antd'],
+            'zustand': ['zustand'],
+          },
+        },
+      }
+    }
   };
 });
