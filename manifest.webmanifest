@@ -1,0 +1,17 @@
+{
+  "short_name": "VSCode Extension Downloader",
+  "name": "VSCode Extension Downloader - Download extensions for offline installation",
+  "description": "A modern web application to download VSCode extensions with support for multiple architectures and version history",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/svg+xml"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#2196f3",
+  "background_color": "#667eea",
+  "categories": ["productivity", "developer", "utilities"]
+}
